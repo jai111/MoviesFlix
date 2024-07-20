@@ -1,24 +1,36 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect } from 'react';
+import { useNavigate, Outlet } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import Sidebar from 'Components/Sidebar';
 
 function App() {
+  const email = useSelector(state => state.user.email);
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    if (email) {
+      navigate('/')
+    }
+    else {
+      navigate('/login')
+    }
+  }, [])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <>
+        <div className="flex flex-1 overflow-hiddent h-screen  m-auto">
+          <div className="w-full">
+            <div className="max-h-full h-full flex flex-row">
+              <Sidebar/>
+              <div className="flex-1 flex-col w-full p-10 pt-[30px]">
+                <Outlet />
+              </div>
+            </div>
+          </div>
+        </div>
+      </>
+    </>
   );
 }
 
