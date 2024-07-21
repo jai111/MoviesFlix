@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { Formik, Form, Field, ErrorMessage} from 'formik';
 import * as Yup from 'yup';
 import { login, signup } from 'Store/userSlice';
 import movieImage from 'Images/movie.jpg';
@@ -25,6 +25,8 @@ function Login() {
   const validationSchema = Yup.object({
     email: Yup.string().email('Invalid email format').required('Email is required'),
   });
+
+  
   
   const handleFormSubmit = async (values) => {
     const userExists = users.includes(values.email);
@@ -46,7 +48,7 @@ function Login() {
             error: 'Sign up failed. Please try again.',
           }
         );
-        navigate('/login')
+        navigate('/login', {replace: true})
         setIsSignup(false)
       }
     } else {
@@ -64,7 +66,7 @@ function Login() {
             error: 'Login failed. Please try again.',
           }
         );
-        navigate('/')
+        navigate('/', {replace: true})
       } else {
         toast.error('User does not exist. Please sign up.');
       }

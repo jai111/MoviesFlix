@@ -75,7 +75,7 @@ export default function FavouriteList() {
                         <span className="flex items-center">
                             <Link size={32} />
                         </span>
-                        <span>&nbsp;to see details of the movie, click on the card to select  or to mark the movie as watched.</span>
+                        <span>&nbsp;to see details of the movie, click on the card to select (select multiple cards to delete them) or to mark the movie as watched.</span>
                     </div>
                 </p>
             </div>

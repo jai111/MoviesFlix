@@ -31,7 +31,7 @@ function MovieDetails() {
   if (error) return <div>Error loading movie details. Please try again.</div>;
 
   return (
-    <div className="flex flex-col items-center justify-center h-full font-mono">
+    <div className="flex flex-col items-center justify-center  font-mono">
       <div className="w-full max-w-4xl p-4">
         <Breadcrumbs aria-label="breadcrumb" className="mb-4">
           <Link component={RouterLink} to={fromPage} color="inherit">
@@ -60,7 +60,7 @@ function MovieDetails() {
                   {movie?.Runtime} | {movie?.Genre}
                 </span>
               </div>
-              <p className="hidden md:block px-4 my-4 text-sm text-left">
+              <p className=" px-4 my-4 text-sm text-left">
                 {movie?.Plot}
               </p>
               <p className="flex text-md px-4 my-2 mb-5">

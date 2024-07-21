@@ -15,7 +15,7 @@ export default function SidebarComponent({ children }) {
 
   const handleLogout = () => {
     dispatch(logout());
-    navigate('/login');
+    navigate('/login', {replace: true});
   };
 
   return (
