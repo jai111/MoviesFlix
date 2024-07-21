@@ -1,11 +1,11 @@
 
 import React from 'react';
 
-function NoData() {
+function NoData({message}) {
   return (
-    <div className="text-center mt-4">
-      <h2>No Data Available</h2>
-      <p>Try searching for something else.</p>
+    <div className="mt-4 flex flex-col justify-center items-center h-[50%]">
+      <h2 className='text-3xl'>No Data Available</h2>
+      <p>{message}</p>
     </div>
   );
 }

@@ -8,29 +8,35 @@ const Home = lazy(() => import('Pages/Home'));
 const MovieDetails  = lazy(()=>import('Pages/MovieDetails'))
 const Login = lazy(()=>import('Pages/Login'))
 const FavouriteList = lazy(()=>import('Pages/FavouriteList'))
+const SideBarLayout = lazy(()=>import('Layouts/SideBarLayout'))
 
 export const routes = createBrowserRouter([
     {
       element: <App/>,
-      children:[
+      children: [
         {
-            path: '/',
-            element: <Home/>
+          element: <SideBarLayout/>,
+          children:[
+            {
+                path: '/',
+                element: <Home/>
+            },
+            {
+              path: '/favourites',
+              element: <FavouriteList/>
+            },
+            {
+              path: '/:id',
+              element: <MovieDetails/>
+            }
+            
+          ]
         },
         {
-          path: '/favourites',
-          element: <FavouriteList/>
-        },
-        {
-          path: '/:id',
-          element: <MovieDetails/>
+          path: '/login',
+          element: <Login/>
         }
-        
       ]
-    },
-    {
-      path: '/login',
-      element: <Login/>
     }
         
   ]);

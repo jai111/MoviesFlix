@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useSearchMoviesQuery } from 'Services/movieApi';
 import SearchBar from 'Components/SearchBar';
@@ -8,14 +8,15 @@ import { Query } from 'Store/userSlice';
 
 function Home() {
   const initialQuery = useSelector((state) => state.user.query);
-  const [query, setQuery] = useState();
-  const [searchTerm, setSearchTerm] = useState();
+  const [query, setQuery] = useState(initialQuery || '');
+  const [searchTerm, setSearchTerm] = useState(initialQuery || 'avengers');
   const [page, setPage] = useState(1);
 
   const dispatch = useDispatch();
-  const { data, error, isLoading , isFetching} = useSearchMoviesQuery({ query: searchTerm, page });
+  const { data, error, isFetching} = useSearchMoviesQuery({ query: searchTerm, page });
 
-  const handleSearch = () => {
+  const handleSearch = (e) => {
+    e.preventDefault()
     if (query.trim()) {
       dispatch(Query(query.trim()));
       setSearchTerm(query.trim());
@@ -56,6 +57,7 @@ function Home() {
         handlePageChange={handlePageChange}
         data={data}
         isLoading={isFetching}
+        error = {error}
       />
     </>
   );

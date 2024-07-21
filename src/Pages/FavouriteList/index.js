@@ -2,17 +2,18 @@ import { useDispatch, useSelector } from "react-redux";
 import MovieCard from "Components/MovieCard";
 import { Stack, Pagination } from "@mui/material";
 import { useState } from "react";
-import { BookmarkPlus, Link } from "lucide-react";
-import { addToRead, removeFromRead, removeMultipleFromWatchlist, removeMultipleWatchList } from "Store/userSlice";
+import { Link } from "lucide-react";
+import { addToRead, removeFromRead, removeMultipleFromWatchlist} from "Store/userSlice";
 import { responsive } from "Utils/constants";
 import Carousel from "react-multi-carousel";
+import NoData from "Components/NoData";
 
 export default function FavouriteList() {
     const [page, setPage] = useState(1);
     const [selected, setSelected] = useState([])
 
     const email = useSelector(state => state.user.email)
-    
+
     let FavouriteList = useSelector(state => state.user.watchlist) || {};
     FavouriteList = FavouriteList[email] || []
 
@@ -26,7 +27,6 @@ export default function FavouriteList() {
 
     let read = useSelector(state => state.user.Read) || {};
     read = read[email] || []
-    console.log(read, 'dfsdf')
 
     const dispatch = useDispatch()
 
@@ -63,7 +63,7 @@ export default function FavouriteList() {
             setPage(newPageCount);
         }
     }
-
+    
     return (
         <div>
             <div className="rounded-md bg-white p-4 border-2 border-primary text-[15px]">
@@ -87,22 +87,28 @@ export default function FavouriteList() {
                     :
                     <button className=" rounded-md bg-white p-2 text-white mt-1">delete</button>
             }
-            <div className='max-w-[100%] grid overflow-x-hidden'>
-                <Carousel responsive={responsive}>
-                    {paginatedMovies.map((movie) => (
-                        <MovieCard
-                            key={movie.imdbID}
-                            movie={movie}
-                            handleClick={(e) => handleClick(e, movie)}
-                            selected={selected.includes(movie?.imdbID)}
-                            read={true}
-                            handleRead={(e) => handleRead(e, movie)}
-                            handleUnread={(e) => handleUnread(e, movie)}
-                            inRead={read?.some(w => w.imdbID === movie.imdbID)}
-                        />
-                    ))}
-                </Carousel>
-            </div>
+            {
+                FavouriteList?.length
+                    ?
+                    <div className='max-w-[100%] grid overflow-x-hidden'>
+                        <Carousel responsive={responsive}>
+                            {paginatedMovies.map((movie) => (
+                                <MovieCard
+                                    key={movie.imdbID}
+                                    movie={movie}
+                                    handleClick={(e) => handleClick(e, movie)}
+                                    selected={selected.includes(movie?.imdbID)}
+                                    read={true}
+                                    handleRead={(e) => handleRead(e, movie)}
+                                    handleUnread={(e) => handleUnread(e, movie)}
+                                    inRead={read?.some(w => w.imdbID === movie.imdbID)}
+                                />
+                            ))}
+                        </Carousel>
+                    </div>
+                    :
+                    <NoData message="No movies in your favourite list"/>
+            }
             {totalResults > moviesPerPage && (
                 <Stack spacing={2} alignItems="center">
                     <Pagination

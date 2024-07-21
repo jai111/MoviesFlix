@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
@@ -8,20 +8,15 @@ import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 
 function Login() {
+
   const [isSignup, setIsSignup] = useState(false);
+  
   const dispatch = useDispatch();
+
   const users = useSelector(state => state.user.users);
+
   const navigate = useNavigate()
   const email = useSelector(state => state.user.email);
-
-  useEffect(() => {
-    if (email) {
-      navigate('/')
-    }
-    else {
-      navigate('/login')
-    }
-  }, [])
 
   const initialValues = {
     email: '',

@@ -6,6 +6,7 @@ const initialState = loadState('user') || {
   users: [], 
   watchlist: {},
   Read: {},  
+  query: '',
 };
 
 const userSlice = createSlice({
@@ -73,6 +74,7 @@ const userSlice = createSlice({
 
     Query: (state, action) => {
       state.query = action.payload;
+      saveState('user', state)
     },
   },
 });

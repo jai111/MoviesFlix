@@ -6,29 +6,34 @@ import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
-import Spinner from 'Components/Spinner';
 import { useNavigate } from 'react-router-dom';
 import { addToRead, addToWatchlist, removeFromRead, removeFromWatchlist } from 'Store/userSlice';
 import NoData from 'Components/NoData';
 import { responsive } from 'Utils/constants';
+import CardSkeleton from 'Components/CardSkeleton';
 
 
-function MovieList({ page, handlePageChange, data, isLoading }) {
+
+
+function MovieList({ page, handlePageChange, data, isLoading, error }) {
   const navigate = useNavigate();
 
   const movies = data?.Search || [];
   const totalResults = data?.totalResults || 0;
   const moviesPerPage = 10;
+
   const email = useSelector(state => state.user.email);
+  
   let watchlist = useSelector(state => state.user.watchlist) || {};
   watchlist = watchlist[email] || [];
+
   let read = useSelector(state => state.user.Read) || {};
   read = read[email] || [];
 
   const dispatch = useDispatch();
 
   const handleClick = (movieId) => {
-    navigate(`/${movieId}`);
+    navigate(`/${movieId}`, {state: {refer: '/'}});
   };
 
   const handleAdd = (e, movie) => {
@@ -51,30 +56,27 @@ function MovieList({ page, handlePageChange, data, isLoading }) {
     dispatch(removeFromRead(movie.imdbID));
   };
 
-  if (isLoading) {
-    return (
-      <div className='flex items-center justify-center h-[100px] flex-col'>
-        <Spinner />
-        <Stack spacing={2} alignItems="center">
-          <Pagination
-            count={Math.ceil(totalResults / moviesPerPage)}
-            page={page}
-            onChange={handlePageChange}
-          />
-        </Stack>
-      </div>
-    );
+  
+  if(error){
+    return <NoData message="Something went wrong"/>
   }
 
   if (!isLoading && movies.length === 0) {
-    return <NoData />;
+    return <NoData message="Try searching for something else." />;
   }
 
   return (
     <>
       <div className='max-w-[100%] grid overflow-x-hidden'>
         <Carousel responsive={responsive}>
-          {movies.map((movie, id) => (
+         {
+          isLoading
+          ?
+          [1,2,3,4,5].map((curr, id)=>{
+            return <CardSkeleton key = {id}/>
+          })
+          :
+          movies.map((movie, id) => (
             <MovieCard
               key={movie.imdbID}
               movie={movie}
@@ -86,7 +88,8 @@ function MovieList({ page, handlePageChange, data, isLoading }) {
               handleUnread={(e) => handleUnread(e, movie)}
               inRead={read?.some(w => w.imdbID === movie.imdbID)}
             />
-          ))}
+          ))
+         }
         </Carousel>
       </div>
 

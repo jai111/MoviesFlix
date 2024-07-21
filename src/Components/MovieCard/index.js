@@ -1,6 +1,5 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { BookmarkPlus, Check, CheckCheckIcon, Link } from 'lucide-react';
+import { BookmarkPlus, Check, Link } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 function MovieCard({
@@ -16,7 +15,6 @@ function MovieCard({
   inRead
 }) {
 
-  const dispatch = useDispatch();
   const navigate = useNavigate()
 
   return (
@@ -25,7 +23,7 @@ function MovieCard({
       className={`rounded-md shadow-lg border m-2 w-full text-[12px] cursor-pointer ${
         selected
         ?
-        'opacity-[0.5]'
+        'opacity-[0.7] bg-gray-800 color-white'
         :
         ''
       }`}
@@ -73,7 +71,13 @@ function MovieCard({
             :
             <button className="ml-4 rounded-md bg-primary p-2 text-white" onClick={handleRead}>Mark as read</button>
           }
-          <Link className='ml-[10px] mt-1 cursor-pointer' onClick={()=>navigate(`/${movie?.imdbID}`)}/>
+          {
+            !handleAdd
+            ?
+            <Link className='ml-[10px] mt-1 cursor-pointer' onClick={()=>navigate(`/${movie?.imdbID}`, {state: {refer: '/favourites'}})}/>
+            :
+            null
+          }
         </div>
       }
       </div>
