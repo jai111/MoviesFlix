@@ -87,7 +87,7 @@ function Login() {
               <Field
                 name="email"
                 className="block w-full py-3.5 px-5 bg-[#333] focus:bg-[#454545] rounded focus:outline-0 focus:ring-0 focus:border-none border-none placeholder:text-[#8c8c8c]"
-                placeholder="Email or phone number"
+                placeholder="Enter your email"
               />
               <ErrorMessage name="email" component="div" className="text-red-500 text-sm mt-2" />
               <button

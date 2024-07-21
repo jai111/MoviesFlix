@@ -1,19 +1,17 @@
-
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import MovieCard from 'Components/MovieCard';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
-import Carousel from "react-multi-carousel";
-import "react-multi-carousel/lib/styles.css";
+import Carousel from 'react-multi-carousel';
+import 'react-multi-carousel/lib/styles.css';
 import { useNavigate } from 'react-router-dom';
 import { addToRead, addToWatchlist, removeFromRead, removeFromWatchlist } from 'Store/userSlice';
 import NoData from 'Components/NoData';
 import { responsive } from 'Utils/constants';
 import CardSkeleton from 'Components/CardSkeleton';
-
-
-
+import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 function MovieList({ page, handlePageChange, data, isLoading, error }) {
   const navigate = useNavigate();
@@ -33,7 +31,7 @@ function MovieList({ page, handlePageChange, data, isLoading, error }) {
   const dispatch = useDispatch();
 
   const handleClick = (movieId) => {
-    navigate(`/${movieId}`, {state: {refer: '/'}});
+    navigate(`/${movieId}`, { state: { refer: '/' } });
   };
 
   const handleAdd = (e, movie) => {
@@ -56,9 +54,11 @@ function MovieList({ page, handlePageChange, data, isLoading, error }) {
     dispatch(removeFromRead(movie.imdbID));
   };
 
-  
-  if(error){
-    return <NoData message="Something went wrong"/>
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
+
+  if (error) {
+    return <NoData message="Something went wrong" />;
   }
 
   if (!isLoading && movies.length === 0) {
@@ -67,37 +67,36 @@ function MovieList({ page, handlePageChange, data, isLoading, error }) {
 
   return (
     <>
-      <div className='max-w-[100%] grid overflow-x-hidden'>
+      <div className="max-w-[100%] grid overflow-x-hidden">
         <Carousel responsive={responsive}>
-         {
-          isLoading
-          ?
-          [1,2,3,4,5].map((curr, id)=>{
-            return <CardSkeleton key = {id}/>
-          })
-          :
-          movies.map((movie, id) => (
-            <MovieCard
-              key={movie.imdbID}
-              movie={movie}
-              inWatchlist={watchlist?.some(w => w.imdbID === movie.imdbID)}
-              handleClick={() => handleClick(movie?.imdbID)}
-              handleAdd={(e) => handleAdd(e, movie)}
-              handleRemove={(e) => handleRemove(e, movie)}
-              handleRead={(e) => handleRead(e, movie)}
-              handleUnread={(e) => handleUnread(e, movie)}
-              inRead={read?.some(w => w.imdbID === movie.imdbID)}
-            />
-          ))
-         }
+          {isLoading
+            ? [1, 2, 3, 4, 5].map((curr, id) => <CardSkeleton key={id} />)
+            : movies.map((movie) => (
+                <MovieCard
+                  key={movie.imdbID}
+                  movie={movie}
+                  inWatchlist={watchlist?.some((w) => w.imdbID === movie.imdbID)}
+                  handleClick={() => handleClick(movie?.imdbID)}
+                  handleAdd={(e) => handleAdd(e, movie)}
+                  handleRemove={(e) => handleRemove(e, movie)}
+                  handleRead={(e) => handleRead(e, movie)}
+                  handleUnread={(e) => handleUnread(e, movie)}
+                  inRead={read?.some((w) => w.imdbID === movie.imdbID)}
+                />
+              ))}
         </Carousel>
       </div>
 
-      <Stack spacing={2} alignItems="center">
+      <Stack spacing={2} alignItems="center" className="mt-4">
         <Pagination
           count={Math.ceil(totalResults / moviesPerPage)}
           page={page}
           onChange={handlePageChange}
+          siblingCount={isSmallScreen ? 0 : 1}
+          boundaryCount={isSmallScreen ? 1 : 2}
+          size={isSmallScreen ? 'small' : 'medium'}
+          showFirstButton={!isSmallScreen}
+          showLastButton={!isSmallScreen}
         />
       </Stack>
     </>

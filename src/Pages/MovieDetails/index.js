@@ -12,47 +12,50 @@ function MovieDetails() {
   const { data: movie, error, isLoading } = useGetMovieDetailsQuery(id);
 
   const fromPage = location.state?.refer || '/';
-  console.log(fromPage, 'from')
+  console.log(fromPage, 'from');
 
   if (isLoading) return (
     <div className="flex flex-col items-center justify-center h-full font-mono">
-      <Breadcrumbs aria-label="breadcrumb">
-        <Link component={RouterLink} to={fromPage} color="inherit">
-          {fromPage === '/favourites' ? 'Favorites' : 'Home'}
-        </Link>
-        <Typography color="textPrimary">{movie?.Title}</Typography>
-      </Breadcrumbs>
-      <MovieDetailsSkeleton />
+      <div className="w-full max-w-4xl p-4">
+        <Breadcrumbs aria-label="breadcrumb">
+          <Link component={RouterLink} to={fromPage} color="inherit">
+            {fromPage === '/favourites' ? 'Favorites' : 'Home'}
+          </Link>
+          <Typography color="textPrimary">Loading...</Typography>
+        </Breadcrumbs>
+        <MovieDetailsSkeleton />
+      </div>
     </div>
   );
+
   if (error) return <div>Error loading movie details. Please try again.</div>;
 
   return (
-    <div className="flex items-center justify-center h-full font-mono">
+    <div className="flex flex-col items-center justify-center h-full font-mono">
       <div className="w-full max-w-4xl p-4">
-        <Breadcrumbs aria-label="breadcrumb">
+        <Breadcrumbs aria-label="breadcrumb" className="mb-4">
           <Link component={RouterLink} to={fromPage} color="inherit">
             {fromPage === '/favourites' ? 'Favorites' : 'Home'}
           </Link>
           <Typography color="textPrimary">{movie?.Title}</Typography>
         </Breadcrumbs>
 
-        <div className="rounded-md bg-gray-800 shadow-lg mt-4">
+        <div className="rounded-md bg-gray-800 shadow-lg p-4 overflow-hidden">
           <div className="md:flex leading-none">
             <div className="flex-none">
               <img
                 src={movie?.Poster}
                 alt="pic"
-                className="rounded-md shadow-2xl border-4 border-gray-300 shadow-lg"
+                className="w-full max-w-xs md:max-w-sm lg:max-w-md rounded-md shadow-2xl border-4 border-gray-300 mx-auto md:mx-0"
               />
             </div>
 
-            <div className="flex-col text-gray-300">
-              <p className="pt-4 text-2xl font-bold text-center">
+            <div className="flex-col text-gray-300 md:ml-4 mt-4 md:mt-0">
+              <p className="pt-4 text-2xl font-bold text-center md:text-left">
                 {movie?.Title} ({movie?.Year})
               </p>
               <hr className="hr-text mt-4 mb-4" data-content="" />
-              <div className="text-md flex justify-center px-4 my-2">
+              <div className="text-md flex justify-center md:justify-start px-4 my-2">
                 <span className="font-bold">
                   {movie?.Runtime} | {movie?.Genre}
                 </span>
