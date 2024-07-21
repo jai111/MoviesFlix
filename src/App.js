@@ -1,18 +1,22 @@
 import React, { useEffect } from 'react';
-import { useNavigate, Outlet } from 'react-router-dom';
+import { useNavigate, Outlet, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 
 function App() {
   const email = useSelector(state => state.user.email);
   const navigate = useNavigate()
+  const location = useLocation()
 
   useEffect(() => {
-    if (email) {
-      navigate('/')
+    const pathname = location.pathname
+    if (!email) {
+      navigate('/login', {replace: true})
     }
-    else {
-      navigate('/login')
+    else{
+      if(pathname === '/login'){
+        navigate('/', {replace: true})
+      }
     }
   }, [])
 
